@@ -118,7 +118,7 @@ class PasswordStrength {
     // ── Common patterns penalty ──────────────────────────────
     if (_isCommonPassword(password)) {
       score = (score * 0.3).round();
-      suggestions.insert(0, 'This is a commonly used password — avoid it.');
+      suggestions.insert(0, 'This is a commonly used password, please avoid it.');
     } else if (_hasRepeatingChars(password)) {
       score -= 10;
       suggestions.add('Avoid repeating characters (e.g., "aaaa").');
