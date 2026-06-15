@@ -1,6 +1,6 @@
 ## 1.0.4
 
-* Fix static analysis warning regarding dangling library doc comment in isolate_runner.dart
+* update the changelog.
 
 ## 1.0.3
 
