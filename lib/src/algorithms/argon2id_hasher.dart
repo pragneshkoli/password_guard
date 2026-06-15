@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:isolate';
+import 'package:password_guard/src/utils/isolate_runner.dart';
 
 import 'package:hashlib/hashlib.dart';
 import 'package:password_guard/src/algorithms/algorithm_base.dart';
@@ -33,7 +33,7 @@ class Argon2IdHasher implements PasswordHasher {
     final passwordBytes = utf8.encode(password);
     final saltBytes = base64Decode(salt);
 
-    final digestBytes = await Isolate.run(() {
+    final digestBytes = await runInIsolate(() {
       return Argon2(
         salt: saltBytes,
         memorySizeKB: config.memory,

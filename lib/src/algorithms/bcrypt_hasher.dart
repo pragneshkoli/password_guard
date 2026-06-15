@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:isolate';
+import 'package:password_guard/src/utils/isolate_runner.dart';
 
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:hashlib/hashlib.dart';
@@ -40,7 +40,7 @@ class BcryptHasher implements PasswordHasher {
     final prehashBytes = utf8.encode(prehash);
 
     // Run in isolate to prevent blocking the main thread
-    final digestEncoded = await Isolate.run(() {
+    final digestEncoded = await runInIsolate(() {
       // Use hashlib's bcrypt — generates its own 16-byte internal salt
       final digest = bcryptDigest(prehashBytes, nb: config.cost);
       return digest.encoded();
@@ -70,7 +70,7 @@ class BcryptHasher implements PasswordHasher {
     try {
       final encodedHash = utf8.decode(base64Decode(hashValue));
       // Run in isolate to prevent blocking the main thread
-      return await Isolate.run(() {
+      return await runInIsolate(() {
         return bcryptVerify(encodedHash, prehashBytes);
       });
     } catch (e) {

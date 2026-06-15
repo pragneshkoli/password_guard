@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:isolate';
+import 'package:password_guard/src/utils/isolate_runner.dart';
 
 import 'package:hashlib/hashlib.dart';
 import 'package:password_guard/src/algorithms/algorithm_base.dart';
@@ -36,7 +36,7 @@ class PBKDF2Hasher implements PasswordHasher {
     final saltBytes = base64Decode(salt);
 
     // Run in isolate to prevent blocking the main thread
-    final digestBytes = await Isolate.run(() {
+    final digestBytes = await runInIsolate(() {
       return pbkdf2(
         passwordBytes,
         saltBytes,

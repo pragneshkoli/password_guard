@@ -1,3 +1,12 @@
+## 1.0.4
+
+* Fix static analysis warning regarding dangling library doc comment in isolate_runner.dart
+
+## 1.0.3
+
+* Fix Web/WASM platform compatibility by decoupling dart:isolate using conditional imports
+* Resolve MIT License detection with standard SPDX text
+
 ## 1.0.2
 
 * Correct LICENSE file format to ensure recognition by pub.dev and GitHub classifiers
