@@ -167,13 +167,15 @@ void main() {
   });
 
   group('PasswordStrength.checkAsync', () {
-    test('returns normal strength check result when no callback provided', () async {
+    test('returns normal strength check result when no callback provided',
+        () async {
       final result = await PasswordStrength.checkAsync('MyPass1!');
       expect(result.score, greaterThan(40));
       expect(result.suggestions.any((s) => s.contains('breach')), isFalse);
     });
 
-    test('penalizes score and adds suggestion when isBreached returns true', () async {
+    test('penalizes score and adds suggestion when isBreached returns true',
+        () async {
       final result = await PasswordStrength.checkAsync(
         'SomePassword',
         isBreached: (pwd) async {
@@ -196,7 +198,8 @@ void main() {
       expect(asyncResult.suggestions, equals(baseResult.suggestions));
     });
 
-    test('handles breached callback throwing gracefully (fails silently)', () async {
+    test('handles breached callback throwing gracefully (fails silently)',
+        () async {
       final baseResult = PasswordStrength.check('StrongPass123!');
       final asyncResult = await PasswordStrength.checkAsync(
         'StrongPass123!',

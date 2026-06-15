@@ -4,7 +4,8 @@ import 'package:test/test.dart';
 void main() {
   group('Timing attack protection', () {
     /// Measures the average duration of [operation] over [runs] iterations.
-    Future<double> measureMs(Future<void> Function() operation, int runs) async {
+    Future<double> measureMs(
+        Future<void> Function() operation, int runs) async {
       final stopwatch = Stopwatch()..start();
       for (int i = 0; i < runs; i++) {
         await operation();

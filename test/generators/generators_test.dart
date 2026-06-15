@@ -126,9 +126,11 @@ void main() {
 
     test('calculates correct entropy in bits', () {
       // 4 words with 512 pool = 4 * 9 = 36 bits
-      expect(PassphraseGenerator.calculateEntropy(wordCount: 4), closeTo(36.0, 0.001));
+      expect(PassphraseGenerator.calculateEntropy(wordCount: 4),
+          closeTo(36.0, 0.001));
       // 5 words with 512 pool = 5 * 9 = 45 bits
-      expect(PassphraseGenerator.calculateEntropy(wordCount: 5), closeTo(45.0, 0.001));
+      expect(PassphraseGenerator.calculateEntropy(wordCount: 5),
+          closeTo(45.0, 0.001));
 
       // Custom pool of 4 elements (log2(4) = 2 bits per word)
       final customList = ['a', 'b', 'c', 'd'];

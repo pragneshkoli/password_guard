@@ -81,9 +81,9 @@ Future<void> _demo2AllAlgorithms() async {
     algorithm: PasswordAlgorithm.argon2id,
     // Custom config (using low values here for demo speed)
     config: Argon2Config(
-      memory: 8192,    // 8 MB (production: 65536 = 64 MB)
-      iterations: 1,   // production: 3
-      parallelism: 1,  // production: 4
+      memory: 8192, // 8 MB (production: 65536 = 64 MB)
+      iterations: 1, // production: 3
+      parallelism: 1, // production: 4
     ),
   );
   print('  Argon2id hash : ${_truncate(argon2Result.hash)}');
@@ -201,8 +201,8 @@ Future<void> _demo4MigrationDetection() async {
   final weakHash = await PasswordGuard.hash(
     password: 'OldPassword1!',
     config: Argon2Config(
-      memory: 8192,   // below OWASP recommendation of 65536
-      iterations: 1,  // below OWASP recommendation of 3
+      memory: 8192, // below OWASP recommendation of 65536
+      iterations: 1, // below OWASP recommendation of 3
       parallelism: 1,
     ),
   );
@@ -222,7 +222,8 @@ Future<void> _demo4MigrationDetection() async {
   print('  Strong config hash needs rehash : $needsUpgrade2 ✅');
 
   // Legacy hash (not in $pg$ format) always needs rehash
-  const legacyBcrypt = r'$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW';
+  const legacyBcrypt =
+      r'$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW';
   final legacyNeedsRehash = PasswordGuard.needsRehash(legacyBcrypt);
   print('  Legacy bcrypt hash needs rehash : $legacyNeedsRehash ✅');
 
@@ -266,7 +267,8 @@ Future<void> _demo5StrengthChecker() async {
   }
 
   print('');
-  print('  -- Asynchronous Breach Check (HIBP / Breached Passwords Callback) --');
+  print(
+      '  -- Asynchronous Breach Check (HIBP / Breached Passwords Callback) --');
   final resultAsync = await PasswordStrength.checkAsync(
     'password123',
     isBreached: (password) async {
@@ -296,7 +298,7 @@ void _demo6PolicyValidation() {
 
   // Define your app's policy once
   const policy = PasswordPolicy(
-    minLength: 6,   // default — users can still remember a 6-char password
+    minLength: 6, // default — users can still remember a 6-char password
     requireUppercase: true,
     requireLowercase: true,
     requireNumber: true,
@@ -312,7 +314,7 @@ void _demo6PolicyValidation() {
     'NoSpecial123',
     'no_upper_1!',
     'MyStrongPass1!',
-    'CompanyName123!',  // banned
+    'CompanyName123!', // banned
   ];
 
   for (final pw in testPasswords) {
@@ -444,7 +446,8 @@ void _demo9Generators() {
   final passphrase = PassphraseGenerator.generate();
   final entropy = PassphraseGenerator.calculateEntropy(wordCount: 4);
   print('  Generated Passphrase (default 4 words): $passphrase');
-  print('  ↳ Entropy: ${entropy.toStringAsFixed(1)} bits (9.0 bits per word from 512-word list)');
+  print(
+      '  ↳ Entropy: ${entropy.toStringAsFixed(1)} bits (9.0 bits per word from 512-word list)');
 
   // Custom passphrase
   final customPassphrase = PassphraseGenerator.generate(
@@ -468,7 +471,8 @@ void _demo9Generators() {
   );
   print('  Passphrase with custom list: $customListPassphrase');
   print('  ↳ List size: ${customList.length} words');
-  print('  ↳ Entropy  : ${customListEntropy.toStringAsFixed(2)} bits (log2(${customList.length}) = ${(log(customList.length) / ln2).toStringAsFixed(2)} bits per word)');
+  print(
+      '  ↳ Entropy  : ${customListEntropy.toStringAsFixed(2)} bits (log2(${customList.length}) = ${(log(customList.length) / ln2).toStringAsFixed(2)} bits per word)');
 }
 
 // ──────────────────────────────────────────────────────────────────────────────

@@ -246,8 +246,7 @@ void main() {
 
     test('returns true for non-pg-prefix hash (legacy)', () {
       // Simulated legacy bcrypt hash
-      const legacyHash =
-          r'$2b$12$somehashedvaluehere.andmorecharacters';
+      const legacyHash = r'$2b$12$somehashedvaluehere.andmorecharacters';
       expect(PasswordGuard.needsRehash(legacyHash), isTrue);
     });
 
@@ -267,7 +266,8 @@ void main() {
   });
 
   group('Security Fixes', () {
-    test('bcrypt does not truncate long passwords/passphrases (>72 characters)', () async {
+    test('bcrypt does not truncate long passwords/passphrases (>72 characters)',
+        () async {
       // Create a password of 100 characters
       final longPassword1 = 'A' * 100;
       // Create a password that differs only in the 90th character
@@ -290,10 +290,12 @@ void main() {
       );
 
       expect(verifyWithSame, isTrue);
-      expect(verifyWithDifferent, isFalse, reason: 'Passwords must not be truncated at 72 bytes.');
+      expect(verifyWithDifferent, isFalse,
+          reason: 'Passwords must not be truncated at 72 bytes.');
     });
 
-    test('HashParser rejects future unsupported hash versions (e.g. v2)', () async {
+    test('HashParser rejects future unsupported hash versions (e.g. v2)',
+        () async {
       // Valid v1 hash: $pg$argon2id$v1$m=8192,t=1,p=1,l=32$<salt>$<hash>
       final v1Result = await PasswordGuard.hash(
         password: 'Password1!',

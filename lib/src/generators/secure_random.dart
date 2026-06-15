@@ -62,9 +62,7 @@ class SecureRandom {
     if (length <= 0) {
       throw ArgumentError('Length must be positive. Got: $length');
     }
-    return bytes(length)
-        .map((b) => b.toRadixString(16).padLeft(2, '0'))
-        .join();
+    return bytes(length).map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
 
   /// Generates a random integer in [0, max).

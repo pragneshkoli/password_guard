@@ -42,8 +42,7 @@ class PasswordHashResult {
   });
 
   @override
-  String toString() =>
-      'PasswordHashResult(algorithm: ${algorithm.identifier}, '
+  String toString() => 'PasswordHashResult(algorithm: ${algorithm.identifier}, '
       'createdAt: $createdAt)';
 
   @override

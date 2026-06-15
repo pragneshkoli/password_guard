@@ -35,7 +35,8 @@ class InvalidHashException extends PasswordGuardException {
   ]);
 
   /// Creates an [InvalidHashException] with a [cause].
-  const InvalidHashException.withCause(super.message, {required Object super.cause});
+  const InvalidHashException.withCause(super.message,
+      {required Object super.cause});
 
   @override
   String toString() => 'InvalidHashException: $message'
@@ -107,7 +108,6 @@ class PasswordPolicyException extends PasswordGuardException {
       : super('Password does not meet policy requirements.');
 
   @override
-  String toString() =>
-      'PasswordPolicyException: $message\nViolations:\n'
+  String toString() => 'PasswordPolicyException: $message\nViolations:\n'
       '${violations.map((v) => '  - $v').join('\n')}';
 }

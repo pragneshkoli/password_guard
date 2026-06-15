@@ -30,7 +30,6 @@ class HashMetadata {
   });
 
   @override
-  String toString() =>
-      'HashMetadata(algorithm: ${algorithm.identifier}, '
+  String toString() => 'HashMetadata(algorithm: ${algorithm.identifier}, '
       'version: v$formatVersion)';
 }

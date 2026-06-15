@@ -76,8 +76,7 @@ class Argon2Config extends AlgorithmConfig {
   }
 
   @override
-  String toString() =>
-      'Argon2Config(memory: $memory, iterations: $iterations, '
+  String toString() => 'Argon2Config(memory: $memory, iterations: $iterations, '
       'parallelism: $parallelism, hashLength: $hashLength)';
 }
 

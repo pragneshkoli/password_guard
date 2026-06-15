@@ -100,11 +100,13 @@ class PasswordPolicy {
     }
 
     if (requireUppercase && !RegExp('[A-Z]').hasMatch(password)) {
-      violations.add('Password must contain at least one uppercase letter (A–Z).');
+      violations
+          .add('Password must contain at least one uppercase letter (A–Z).');
     }
 
     if (requireLowercase && !RegExp('[a-z]').hasMatch(password)) {
-      violations.add('Password must contain at least one lowercase letter (a–z).');
+      violations
+          .add('Password must contain at least one lowercase letter (a–z).');
     }
 
     if (requireNumber && !RegExp('[0-9]').hasMatch(password)) {

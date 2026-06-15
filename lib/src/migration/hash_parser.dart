@@ -82,7 +82,8 @@ class HashParser {
     try {
       algorithm = PasswordAlgorithmExtension.fromIdentifier(algorithmStr);
     } catch (_) {
-      throw InvalidHashException('Unknown algorithm identifier: "$algorithmStr".');
+      throw InvalidHashException(
+          'Unknown algorithm identifier: "$algorithmStr".');
     }
 
     // Parse version

@@ -75,11 +75,13 @@ class PasswordGenerator {
 
     if (includeLowercase) {
       pool.write(lowercaseChars);
-      guaranteed.add(lowercaseChars[SecureRandom.nextInt(lowercaseChars.length)]);
+      guaranteed
+          .add(lowercaseChars[SecureRandom.nextInt(lowercaseChars.length)]);
     }
     if (includeUppercase) {
       pool.write(uppercaseChars);
-      guaranteed.add(uppercaseChars[SecureRandom.nextInt(uppercaseChars.length)]);
+      guaranteed
+          .add(uppercaseChars[SecureRandom.nextInt(uppercaseChars.length)]);
     }
     if (includeDigits) {
       pool.write(digitChars);
