@@ -85,6 +85,14 @@ class PasswordPolicy {
   PasswordValidationResult validate(String password) {
     final violations = <String>[];
 
+    final lowerPassword = password.toLowerCase();
+    for (final banned in bannedPasswords) {
+      if (lowerPassword == banned.toLowerCase()) {
+        violations.add('This password is not allowed.');
+        break;
+      }
+    }
+
     if (password.length < minLength) {
       violations.add(
         'Password must be at least $minLength characters long '
@@ -118,14 +126,6 @@ class PasswordPolicy {
         'Password must contain at least one special character '
         r'(e.g., !@#$%^&*).',
       );
-    }
-
-    final lowerPassword = password.toLowerCase();
-    for (final banned in bannedPasswords) {
-      if (lowerPassword == banned.toLowerCase()) {
-        violations.add('This password is not allowed.');
-        break;
-      }
     }
 
     return PasswordValidationResult(

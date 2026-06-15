@@ -1,3 +1,7 @@
+## 1.0.5
+
+* Prioritize banned password checks in PasswordPolicy so disallowed passwords fail validation immediately before complexity checks.
+
 ## 1.0.4
 
 * update the changelog.
