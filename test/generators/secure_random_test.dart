@@ -24,8 +24,11 @@ void main() {
       expect(a, isNot(equals(b)));
     });
 
-    test('throws assertion for zero length', () {
-      expect(() => SecureRandom.bytes(0), throwsA(isA<AssertionError>()));
+    test('throws ArgumentError for zero length', () {
+      expect(() => SecureRandom.bytes(0), throwsA(isA<ArgumentError>()));
+    });
+    test('throws ArgumentError for negative length', () {
+      expect(() => SecureRandom.bytes(-5), throwsA(isA<ArgumentError>()));
     });
   });
 
@@ -45,6 +48,10 @@ void main() {
       final b = SecureRandom.base64(32);
       expect(a, isNot(equals(b)));
     });
+
+    test('throws ArgumentError for zero length', () {
+      expect(() => SecureRandom.base64(0), throwsA(isA<ArgumentError>()));
+    });
   });
 
   group('SecureRandom.hex', () {
@@ -62,6 +69,10 @@ void main() {
       final a = SecureRandom.hex(32);
       final b = SecureRandom.hex(32);
       expect(a, isNot(equals(b)));
+    });
+
+    test('throws ArgumentError for zero length', () {
+      expect(() => SecureRandom.hex(0), throwsA(isA<ArgumentError>()));
     });
   });
 

@@ -29,7 +29,9 @@ class SecureRandom {
   /// final bytes = SecureRandom.bytes(32);
   /// ```
   static Uint8List bytes(int length) {
-    assert(length > 0, 'length must be positive');
+    if (length <= 0) {
+      throw ArgumentError('Length must be positive. Got: $length');
+    }
     return Uint8List.fromList(
       List<int>.generate(length, (_) => _random.nextInt(256)),
     );
@@ -43,7 +45,9 @@ class SecureRandom {
   /// final token = SecureRandom.base64(32); // 44 chars
   /// ```
   static String base64(int length) {
-    assert(length > 0, 'length must be positive');
+    if (length <= 0) {
+      throw ArgumentError('Length must be positive. Got: $length');
+    }
     return base64Encode(bytes(length));
   }
 
@@ -55,7 +59,9 @@ class SecureRandom {
   /// final hex = SecureRandom.hex(16); // 32 hex chars
   /// ```
   static String hex(int length) {
-    assert(length > 0, 'length must be positive');
+    if (length <= 0) {
+      throw ArgumentError('Length must be positive. Got: $length');
+    }
     return bytes(length)
         .map((b) => b.toRadixString(16).padLeft(2, '0'))
         .join();

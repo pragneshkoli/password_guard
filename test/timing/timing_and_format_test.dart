@@ -20,7 +20,7 @@ void main() {
         final result = await PasswordGuard.hash(
           password: password,
           algorithm: PasswordAlgorithm.pbkdf2,
-          config: PBKDF2Config(iterations: 10000), // low for test speed
+          config: PBKDF2Config(iterations: 100000), // low for test speed
         );
 
         const runs = 5;

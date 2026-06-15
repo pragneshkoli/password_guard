@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:password_guard/src/models/password_strength_result.dart';
 
 /// Checks password strength and returns a score with suggestions.
@@ -23,6 +24,39 @@ import 'package:password_guard/src/models/password_strength_result.dart';
 /// ```
 class PasswordStrength {
   PasswordStrength._();
+
+  /// Analyzes [password] asynchronously, allowing a custom breach checking
+  /// callback (e.g. checking via HaveIBeenPwned API).
+  ///
+  /// If [isBreached] returns true, the score is significantly penalized and a
+  /// suggestion to avoid using the breached password is added.
+  static Future<PasswordStrengthResult> checkAsync(
+    String password, {
+    Future<bool> Function(String)? isBreached,
+  }) async {
+    final result = check(password);
+    if (isBreached != null && password.isNotEmpty) {
+      try {
+        final breached = await isBreached(password);
+        if (breached) {
+          final score = (result.score * 0.2).round();
+          final suggestions = List<String>.from(result.suggestions);
+          suggestions.insert(
+            0,
+            'This password was found in a data breach and is unsafe to use.',
+          );
+          return PasswordStrengthResult(
+            score: score,
+            level: _scoreToLevel(score),
+            suggestions: suggestions,
+          );
+        }
+      } catch (_) {
+        // Fail silently to prevent crashing client strength checks
+      }
+    }
+    return result;
+  }
 
   /// Analyzes [password] and returns a [PasswordStrengthResult].
   ///
@@ -103,12 +137,12 @@ class PasswordStrength {
     if (hasSpecial) charsetSize += 32;
 
     if (charsetSize > 0) {
-      final entropy = length * (charsetSize / 94.0);
-      if (entropy >= 60) {
+      final entropy = length * (log(charsetSize) / ln2);
+      if (entropy >= 100) {
         score += 25;
-      } else if (entropy >= 40) {
+      } else if (entropy >= 70) {
         score += 18;
-      } else if (entropy >= 25) {
+      } else if (entropy >= 45) {
         score += 10;
       } else {
         score += 3;
@@ -152,6 +186,22 @@ class PasswordStrength {
       '111111', 'baseball', 'iloveyou', 'master', 'sunshine',
       'ashley', 'bailey', 'passw0rd', 'shadow', '123123',
       '654321', 'superman', 'qazwsx', 'michael', 'football',
+      '1234', '12345', '123456789', '1234567890', '123123123',
+      '11111111', '22222222', '33333333', '44444444', '55555555',
+      '66666666', '77777777', '88888888', '99999999', '00000000',
+      'admin', 'admin123', 'root', 'login', 'security',
+      'welcome', 'welcome1', 'guest', 'hunter2', 'charlie',
+      'jessica', 'andrew', 'matthew', 'daniel', 'joseph',
+      'mustang', 'princess', 'bubblegum', 'secret', 'snoopy',
+      'killer', 'phoenix', 'morgan', 'cookie', 'cooper',
+      'guitar', 'soccer', 'hockey', 'joshua', 'brandon',
+      'nathan', 'justin', 'thomas', 'robert', 'william',
+      'hunter', 'brian', 'kevin', 'christopher', 'david',
+      'hannah', 'sarah', 'elizabeth', 'lauren', 'megan',
+      'amanda', 'rachel', 'rebecca', 'nicole', 'emily',
+      'taylor', 'jessica1', 'ashley1', 'sarah1', 'emily1',
+      'charlie1', 'david1', 'daniel1', 'james', 'john',
+      'mary', 'patricia', 'jennifer', 'linda', 'barbara'
     };
     return common.contains(password.toLowerCase());
   }

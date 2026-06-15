@@ -265,4 +265,48 @@ void main() {
       );
     });
   });
+
+  group('Security Fixes', () {
+    test('bcrypt does not truncate long passwords/passphrases (>72 characters)', () async {
+      // Create a password of 100 characters
+      final longPassword1 = 'A' * 100;
+      // Create a password that differs only in the 90th character
+      final longPassword2 = '${'A' * 90}B${'A' * 9}';
+
+      final hash1 = await PasswordGuard.hash(
+        password: longPassword1,
+        algorithm: PasswordAlgorithm.bcrypt,
+        config: BcryptConfig(cost: 4),
+      );
+
+      // Verify that they do not collision-verify
+      final verifyWithSame = await PasswordGuard.verify(
+        password: longPassword1,
+        hash: hash1.hash,
+      );
+      final verifyWithDifferent = await PasswordGuard.verify(
+        password: longPassword2,
+        hash: hash1.hash,
+      );
+
+      expect(verifyWithSame, isTrue);
+      expect(verifyWithDifferent, isFalse, reason: 'Passwords must not be truncated at 72 bytes.');
+    });
+
+    test('HashParser rejects future unsupported hash versions (e.g. v2)', () async {
+      // Valid v1 hash: $pg$argon2id$v1$m=8192,t=1,p=1,l=32$<salt>$<hash>
+      final v1Result = await PasswordGuard.hash(
+        password: 'Password1!',
+        config: Argon2Config(memory: 8192, iterations: 1, parallelism: 1),
+      );
+
+      // Create a simulated v2 hash by replacing $v1$ with $v2$
+      final v2Hash = v1Result.hash.replaceFirst(r'$v1$', r'$v2$');
+
+      expect(
+        () => PasswordGuard.verify(password: 'Password1!', hash: v2Hash),
+        throwsA(isA<InvalidHashException>()),
+      );
+    });
+  });
 }

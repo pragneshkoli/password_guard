@@ -97,6 +97,12 @@ class HashParser {
         'Could not parse version number from: "$versionStr".',
       );
     }
+    if (formatVersion > _kFormatVersion) {
+      throw InvalidHashException(
+        'Unsupported hash format version: "v$formatVersion". '
+        'This library supports up to version "v$_kFormatVersion".',
+      );
+    }
 
     // Parse params
     final config = _parseParams(algorithm, paramsStr);

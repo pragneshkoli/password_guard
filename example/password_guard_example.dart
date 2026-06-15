@@ -6,7 +6,8 @@
 ///   dart run example/password_guard_example.dart
 library;
 
-import 'package:password_guard/password_guard.dart';
+import 'dart:math';
+import 'package:password_guard/password_guard_io.dart';
 
 Future<void> main() async {
   _printHeader('password_guard — Feature Demo');
@@ -15,10 +16,11 @@ Future<void> main() async {
   await _demo2AllAlgorithms();
   await _demo3PepperSupport();
   await _demo4MigrationDetection();
-  _demo5StrengthChecker();
+  await _demo5StrengthChecker();
   _demo6PolicyValidation();
   _demo7SecureRandom();
   await _demo8ExceptionHandling();
+  _demo9Generators();
 
   _printHeader('All demos completed ✅');
 }
@@ -235,7 +237,7 @@ Future<void> _demo4MigrationDetection() async {
 // Demo 5 — Password Strength Checker
 // ──────────────────────────────────────────────────────────────────────────────
 
-void _demo5StrengthChecker() {
+Future<void> _demo5StrengthChecker() async {
   _printSection('5. Password Strength Checker');
 
   final passwords = [
@@ -257,8 +259,26 @@ void _demo5StrengthChecker() {
       '${result.level.label}',
     );
     if (result.suggestions.isNotEmpty) {
-      print('    ↳ ${result.suggestions.first}');
+      for (final suggestion in result.suggestions) {
+        print('    ↳ Suggestion: $suggestion');
+      }
     }
+  }
+
+  print('');
+  print('  -- Asynchronous Breach Check (HIBP / Breached Passwords Callback) --');
+  final resultAsync = await PasswordStrength.checkAsync(
+    'password123',
+    isBreached: (password) async {
+      // Simulation: assume 'password123' is found in leaked list
+      return password == 'password123';
+    },
+  );
+  print('  Checking "password123" with custom breached check:');
+  print('    Score : ${resultAsync.score}/100');
+  print('    Level : ${resultAsync.level.label}');
+  for (final suggestion in resultAsync.suggestions) {
+    print('    ↳ $suggestion');
   }
 
   print('');
@@ -388,15 +408,67 @@ Future<void> _demo8ExceptionHandling() async {
   try {
     const PasswordPolicy(minLength: 20).validateOrThrow('short');
   } on PasswordPolicyException catch (e) {
-    print('  PasswordPolicyException   : ${e.violations.first}');
+    print('  PasswordPolicyException   : ${e.message}');
+    for (final v in e.violations) {
+      print('    • Violation: $v');
+    }
   }
 
   // Catch-all using base class
   try {
     await PasswordGuard.verify(password: 'x', hash: 'bad');
   } on PasswordGuardException catch (e) {
-    print('  PasswordGuardException    : ${e.runtimeType}');
+    print('  PasswordGuardException    : ${e.runtimeType} — ${e.message}');
   }
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Demo 9 — Password & Passphrase Generators
+// ──────────────────────────────────────────────────────────────────────────────
+
+void _demo9Generators() {
+  _printSection('9. Password & Passphrase Generators');
+
+  // Generate a standard password
+  final password = PasswordGenerator.generate();
+  print('  Generated Password (default 16 chars): $password');
+
+  // Custom password
+  final customPassword = PasswordGenerator.generate(
+    length: 24,
+    includeSpecial: false,
+  );
+  print('  Custom Password (24 chars, no special): $customPassword');
+
+  // Generate a standard passphrase
+  final passphrase = PassphraseGenerator.generate();
+  final entropy = PassphraseGenerator.calculateEntropy(wordCount: 4);
+  print('  Generated Passphrase (default 4 words): $passphrase');
+  print('  ↳ Entropy: ${entropy.toStringAsFixed(1)} bits (9.0 bits per word from 512-word list)');
+
+  // Custom passphrase
+  final customPassphrase = PassphraseGenerator.generate(
+    wordCount: 6,
+    separator: '_',
+  );
+  final customEntropy = PassphraseGenerator.calculateEntropy(wordCount: 6);
+  print('  Custom Passphrase (6 words, underscore): $customPassphrase');
+  print('  ↳ Entropy: ${customEntropy.toStringAsFixed(1)} bits');
+
+  // Custom wordlist passphrase
+  final customList = ['alpha', 'beta', 'gamma', 'delta', 'epsilon'];
+  final customListPassphrase = PassphraseGenerator.generate(
+    wordCount: 3,
+    customWordList: customList,
+    separator: '.',
+  );
+  final customListEntropy = PassphraseGenerator.calculateEntropy(
+    wordCount: 3,
+    customWordList: customList,
+  );
+  print('  Passphrase with custom list: $customListPassphrase');
+  print('  ↳ List size: ${customList.length} words');
+  print('  ↳ Entropy  : ${customListEntropy.toStringAsFixed(2)} bits (log2(${customList.length}) = ${(log(customList.length) / ln2).toStringAsFixed(2)} bits per word)');
 }
 
 // ──────────────────────────────────────────────────────────────────────────────

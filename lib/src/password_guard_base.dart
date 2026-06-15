@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:password_guard/src/algorithms/algorithm_base.dart';
 import 'package:password_guard/src/algorithms/argon2id_hasher.dart';
 import 'package:password_guard/src/algorithms/bcrypt_hasher.dart';
@@ -282,10 +284,13 @@ class PasswordGuard {
 
   // ── Private helpers ────────────────────────────────────────────────────────
 
-  /// Mixes the pepper into the password.
+  /// Mixes the pepper into the password using HMAC-SHA256.
   ///
-  /// Uses HMAC-style concatenation. The pepper is never stored.
+  /// The pepper is never stored.
   static String _applyPepper(String password, String pepper) {
-    return '$pepper:$password';
+    final key = utf8.encode(pepper);
+    final msg = utf8.encode(password);
+    final hmac = Hmac(sha256, key);
+    return base64Encode(hmac.convert(msg).bytes);
   }
 }

@@ -15,7 +15,7 @@ dart run example/password_guard_example.dart
 ## What the Example Covers
 
 The example file [`password_guard_example.dart`](password_guard_example.dart)
-walks through **8 demos**, each showing real-world usage patterns.
+walks through **9 demos**, each showing real-world usage patterns.
 
 ---
 
@@ -119,7 +119,7 @@ final result = await PasswordGuard.hash(
 );
 
 // With EnvPepperProvider — reads env var (native platforms only)
-import 'package:password_guard/src/pepper/env_pepper_provider.dart';
+import 'package:password_guard/password_guard_io.dart';
 
 final result = await PasswordGuard.hash(
   password: 'myPassword',
@@ -289,6 +289,36 @@ try {
   // Catch-all for any password_guard error
   logger.error('Unexpected auth error: ${e.runtimeType} — ${e.message}');
 }
+```
+
+---
+
+### Demo 9 — Password & Passphrase Generators
+
+Generate highly secure random passwords or human-friendly, readable passphrases.
+
+```dart
+// Generate standard 16-char password (lowercase, uppercase, numbers, special characters)
+// Guarantees at least one character from each enabled set.
+final password = PasswordGenerator.generate();
+
+// Custom length and enabled pools
+final custom = PasswordGenerator.generate(
+  length: 24,
+  includeSpecial: false,
+);
+
+// Generates standard 4-word passphrase separated by dashes: e.g. "apple-beach-cloud-flute"
+final phrase = PassphraseGenerator.generate();
+
+// Custom word count and separator
+final securePhrase = PassphraseGenerator.generate(
+  wordCount: 6,
+  separator: '_',
+);
+
+// Calculate entropy in bits (9 bits per word from 512 word list)
+final bits = PassphraseGenerator.calculateEntropy(wordCount: 6); // 54.0 bits
 ```
 
 ---

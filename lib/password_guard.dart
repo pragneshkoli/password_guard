@@ -55,13 +55,13 @@ export 'src/validators/password_policy.dart'
 export 'src/pepper/pepper_provider.dart'
     show PepperProvider, MemoryPepperProvider;
 // Note: EnvPepperProvider requires dart:io (not available on Web).
-// Import it separately when needed on native platforms:
-// import 'package:password_guard/src/pepper/env_pepper_provider.dart';
-export 'src/pepper/env_pepper_provider.dart' show EnvPepperProvider;
+// Import package:password_guard/password_guard_io.dart when needed on native platforms.
 
 // ── Utilities ──────────────────────────────────────────────────────────────
 export 'src/generators/secure_random.dart' show SecureRandom;
 export 'src/generators/salt_generator.dart' show SaltGenerator;
+export 'src/generators/password_generator.dart' show PasswordGenerator;
+export 'src/generators/passphrase_generator.dart' show PassphraseGenerator;
 
 // ── Exceptions ─────────────────────────────────────────────────────────────
 export 'src/exceptions/exceptions.dart'

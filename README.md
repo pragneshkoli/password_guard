@@ -227,7 +227,7 @@ final valid = await PasswordGuard.verify(
 
 ```dart
 // Reads from PASSWORD_GUARD_PEPPER env var (dart:io only — not Web)
-import 'package:password_guard/src/pepper/env_pepper_provider.dart';
+import 'package:password_guard/password_guard_io.dart';
 
 final result = await PasswordGuard.hash(
   password: 'myPassword',
@@ -386,6 +386,44 @@ final salt = SaltGenerator.generate(length: 32); // 32 bytes
 
 ---
 
+## 🛠️ Password & Passphrase Generators
+
+Generate highly secure random passwords or readable, human-friendly passphrases using cryptographically secure values.
+
+### Password Generator
+
+```dart
+// Generate standard 16-char password (lowercase, uppercase, numbers, special characters)
+// Guarantees at least one character from each enabled set.
+final password = PasswordGenerator.generate();
+
+// Custom length and enabled pools
+final custom = PasswordGenerator.generate(
+  length: 24,
+  includeSpecial: false,
+);
+```
+
+### Passphrase Generator
+
+Generates readable, easy-to-remember passphrases from a curated, high-quality list of 512 words. Since the default wordlist size is exactly 512 ($2^9$), each word adds exactly 9 bits of entropy to the passphrase.
+
+```dart
+// Generates standard 4-word passphrase separated by dashes: e.g. "apple-beach-cloud-flute"
+final phrase = PassphraseGenerator.generate();
+
+// Custom word count and separator
+final securePhrase = PassphraseGenerator.generate(
+  wordCount: 6,
+  separator: '_',
+);
+
+// Calculate entropy in bits
+final bits = PassphraseGenerator.calculateEntropy(wordCount: 6); // 54.0 bits
+```
+
+---
+
 ## ⚠️ Exception Handling
 
 All exceptions extend `PasswordGuardException` for easy catch-all handling:
@@ -483,8 +521,8 @@ Future<String> register(Session session, String email, String password) async {
 | Version | Features |
 |---------|----------|
 | **v1.0.0** ✅ | Argon2id, bcrypt, PBKDF2, Salt, Pepper, Verify, Migration, Strength, Policy |
-| **v1.1.0** | Security audit report, password generator, passphrase generator |
-| **v1.2.0** | Cloud secret providers: AWS Secrets Manager, GCP Secret Manager, Azure Key Vault |
+| **v1.1.0** ✅ | Password generator, passphrase generator |
+| **v1.2.0** | Cloud secret providers: AWS Secrets Manager, GCP Secret Manager, Azure Key Vault, Security Audit |
 | **v2.0.0** | `password_guard_flutter` — ready-made UI widgets, strength indicator widget |
 
 ---
