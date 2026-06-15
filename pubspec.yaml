@@ -1,0 +1,34 @@
+name: password_guard
+description: >
+  A modern, secure, developer-friendly password hashing library for Dart and Flutter.
+  Supports Argon2id, bcrypt, and PBKDF2 with OWASP-recommended defaults.
+  Works with any state management (Provider, Riverpod, BLoC, GetX) and any
+  Dart framework (Flutter, Shelf, Dart Frog, Serverpod, CLI).
+version: 1.0.0
+homepage: https://github.com/pragneshkoli/password_guard
+repository: https://github.com/pragneshkoli/password_guard
+issue_tracker: https://github.com/pragneshkoli/password_guard/issues
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  # Secure hash functions: Argon2id, PBKDF2, bcrypt — pure Dart, all platforms
+  # 160/160 pub points, 56K+ downloads
+  hashlib: ^2.3.4
+  # HMAC / SHA primitives (also used by hashlib internally)
+  crypto: ^3.0.3
+
+dev_dependencies:
+  test: ^1.24.0
+  lints: ^3.0.0
+  coverage: ^1.7.0
+
+# No Flutter dependency — works with any Dart runtime
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  windows:
+  web:
