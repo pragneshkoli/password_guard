@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Correct LICENSE file format to ensure recognition by pub.dev and GitHub classifiers
+
 ## 1.0.1
 
 * Fix pub.dev license recognition by adding the LICENSE file
