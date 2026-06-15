@@ -1,3 +1,8 @@
+## 1.0.1
+
+* Fix pub.dev license recognition by adding the LICENSE file
+* Optimize package description and keywords for search visibility
+
 ## 1.0.0
 
 * Initial release
