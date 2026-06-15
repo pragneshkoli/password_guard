@@ -1,0 +1,8 @@
+# Exclude local documentation and reports from the pub.dev package bundle
+# to keep the package size minimal, while retaining them in the git repository.
+docs/
+security_analysis.md
+*.md.tmp
+walkthrough.md
+task.md
+implementation_plan.md
